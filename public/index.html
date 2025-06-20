@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aposta Cega 🎲</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="/socket.io/socket.io.js"></script>
+  <script defer src="client.js"></script>
+</head>
+<body>
+  <div id="login" class="tela">
+    <h1>Aposta Cega 🎲</h1>
+    <input id="usuario" placeholder="Usuário" />
+    <input id="senha" type="password" placeholder="Senha" />
+    <button onclick="login()">Login / Cadastro</button>
+    <p id="statusLogin"></p>
+  </div>
+
+  <div id="menu" class="tela">
+    <h2>Bem-vindo!</h2>
+    <p>Saldo: R$<span id="carteira">0</span></p>
+    <input id="nomeSala" placeholder="Nome da Sala" />
+    <input id="valorSala" type="number" placeholder="Valor da Aposta" />
+    <button onclick="criarSala()">Criar Sala</button>
+    <h3>Salas Disponíveis:</h3>
+    <ul id="listaSalas"></ul>
+  </div>
+
+  <div id="jogo" class="tela">
+    <h2>Partida: <span id="nomeSalaAtual"></span></h2>
+    <p>Seus pontos: <span id="pontos">30</span></p>
+    <input id="aposta" type="number" placeholder="Sua aposta" />
+    <button id="botaoApostar" onclick="apostar()">Apostar</button>
+    <p id="statusRodada"></p>
+    <div id="historico"></div>
+  </div>
+</body>
+</html>
