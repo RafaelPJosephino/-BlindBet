@@ -28,12 +28,16 @@
   </div>
 
   <div id="jogo" class="tela">
-    <h2>Partida: <span id="nomeSalaAtual"></span></h2>
-    <p>Seus pontos: <span id="pontos">30</span></p>
-    <input id="aposta" type="number" placeholder="Sua aposta" />
-    <button id="botaoApostar" onclick="apostar()">Apostar</button>
-    <p id="statusRodada"></p>
-    <div id="historico"></div>
-  </div>
+  <h2>Partida: <span id="nomeSalaAtual"></span></h2>
+  <p>Jogadores: <span id="jogadoresNaSala"></span></p> <!-- 🔥 Nome dos jogadores -->
+  <p>Seus pontos: <span id="pontos">30</span></p>
+  <p id="tempoSala"></p> <!-- 🔥 Temporizador -->
+  <input id="aposta" type="number" placeholder="Sua aposta" />
+  <button id="botaoApostar" onclick="apostar()">Apostar</button>
+  <button id="botaoCancelar" onclick="cancelarSala()" style="background-color:#e74c3c;">Cancelar e Voltar</button>
+  <p id="statusRodada"></p>
+  <div id="historico"></div>
+</div>
+
 </body>
 </html>

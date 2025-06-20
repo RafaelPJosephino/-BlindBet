@@ -95,9 +95,33 @@ io.on('connection', socket => {
     sala.usuarios[jogadorNum] = usuario;
     sala.pontos[jogadorNum] = 30;
 
+    clearInterval(sala.countdownInterval);
+    sala.tempoRestante = null;
+
     socket.join(nome);
-    io.to(nome).emit('iniciarJogo', { nome, valorAposta: sala.valor });
+
+    io.to(nome).emit('iniciarJogo', {
+      nome,
+      valorAposta: sala.valor,
+      jogadores: sala.usuarios
+    });
+
     atualizarCarteira(usuario);
+    atualizarSalas();
+  });
+
+  socket.on('cancelarSala', nome => {
+  const sala = salas[nome];
+  const usuario = jogadoresConectados[socket.id];
+
+  if (sala && sala.usuarios[1] === usuario && Object.keys(sala.jogadores).length === 1) {
+    clearInterval(sala.countdownInterval);
+    usuarios[usuario].carteira += sala.valor;
+    io.to(nome).emit('salaCancelada', 'Sala cancelada. Valor devolvido.');
+    delete salas[nome];
+    atualizarCarteira(usuario);
+    atualizarSalas();
+  }
   });
 
   socket.on('apostar', ({ sala, valor }) => {
@@ -210,7 +234,13 @@ io.on('connection', socket => {
       }
     }
   }
+  
+  socket.on('erro', msg => {
+  alert(`Erro: ${msg}`);
+  });
+
 });
+
 
 http.listen(3000, () => {
   console.log('Servidor rodando em http://localhost:3000');

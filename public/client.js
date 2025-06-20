@@ -67,6 +67,9 @@ socket.on('salaEntrou', dados => {
   document.getElementById('pontos').innerText = pontos;
   document.getElementById('historico').innerText = '';
   document.getElementById('statusRodada').innerText = '';
+  document.getElementById('jogadoresNaSala').innerText = `${usuario} (esperando...)`;
+  document.getElementById('botaoApostar').disabled = true;
+  document.getElementById('botaoCancelar').style.display = 'block'; // 🔥 Mostra botão de cancelar
   mostrar('jogo');
 });
 
@@ -98,8 +101,38 @@ socket.on('carteiraAtualizada', valor => {
   document.getElementById('carteira').innerText = valor;
 });
 
+socket.on('iniciarJogo', dados => {
+  document.getElementById('tempoSala').innerText = '';
+  document.getElementById('botaoApostar').disabled = false;
+  document.getElementById('jogadoresNaSala').innerText = `${dados.jogadores[1]} vs ${dados.jogadores[2]}`;
+  document.getElementById('botaoCancelar').style.display = 'none'; // 🔥 Esconde botão
+});
+
+socket.on('atualizarTempo', tempo => {
+  document.getElementById('tempoSala').innerText = `Aguardando jogador... ${tempo}s`;
+});
+
+socket.on('salaCancelada', msg => {
+  alert(msg);
+  document.getElementById('tempoSala').innerText = '';
+  document.getElementById('jogadoresNaSala').innerText = '';
+  document.getElementById('botaoCancelar').style.display = 'none';
+  mostrar('menu');
+});
+
+
+function cancelarSala() {
+  if (confirm('Deseja cancelar e sair da sala?')) {
+    socket.emit('cancelarSala', salaAtual);
+    document.getElementById('botaoCancelar').style.display = 'none';
+    mostrar('menu');
+  }
+}
+
+
 socket.on('fimJogo', dados => {
   alert(`Fim de jogo!\nResultado:\nJogador 1 (${dados.jogadores[1]}): R$${dados.resultados[1]}\nJogador 2 (${dados.jogadores[2]}): R$${dados.resultados[2]}`);
+  document.getElementById('botaoCancelar').style.display = 'none';
   mostrar('menu');
 });
 
@@ -107,4 +140,5 @@ setInterval(() => {
   socket.emit('listarSalas');
 }, 3000);
 
+document.getElementById('botaoCancelar').style.display = 'none';
 mostrar('login');
